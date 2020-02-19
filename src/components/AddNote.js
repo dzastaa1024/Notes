@@ -39,7 +39,7 @@ class AddNote extends Component {
                 <Form.Field
                     control={TextArea}
                     label='Opinion'
-                    placeholder='Opinion'
+                    placeholder='Note'
                     onChange={this.handleChange}
                     name="note"
                     value={this.state.note}

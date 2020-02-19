@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import AddNote from './components/AddNote';
+import DisplayNotes from './components/DisplayNotes';
 import 'semantic-ui-css/semantic.min.css';
-import { Container } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 
 class App extends Component {
@@ -10,6 +11,22 @@ class App extends Component {
   state = {
     notes: [],
   }
+
+  async componentDidMount() {
+    const url = 'http://localhost:3001/notes';
+
+    const response = await axios.get(url);
+    console.log(response);
+    if (response.status === 200) {
+      this.setState({
+        notes: response.data,
+      });
+    }
+  }
+
+
+
+
 
   handleAddNote = async (newNote) => {
     const url = 'http://localhost:3001/notes';
@@ -25,10 +42,14 @@ class App extends Component {
     }
   }
 
+
+
   render() {
     return (
       <Container>
         <AddNote addNote={this.handleAddNote} />
+        <Divider />
+        <DisplayNotes notes={this.state.notes} />
       </Container>
     );
   }
