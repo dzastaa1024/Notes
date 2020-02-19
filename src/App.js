@@ -6,6 +6,8 @@ import 'semantic-ui-css/semantic.min.css';
 import { Container, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 
+
+
 class App extends Component {
 
   state = {
@@ -32,7 +34,7 @@ class App extends Component {
     const url = 'http://localhost:3001/notes';
     const payload = {
       ...newNote,
-      createAdd: new Date(),
+      createdAt: new Date(),
     }
     const response = await axios.post(url, payload);
     if (response.status === 200 || response.status === 201) {
@@ -42,6 +44,19 @@ class App extends Component {
     }
   }
 
+  removeNote = async (id) => {
+    const url = `http://localhost:3001/notes/${id}`;
+
+    const response = await axios.delete(url);
+    console.log('response', response);
+
+    if (response.status === 200) {
+      this.setState({
+        notes: this.state.notes.filter((note) => note.id !== id),
+      });
+    }
+
+  }
 
 
   render() {
@@ -49,7 +64,8 @@ class App extends Component {
       <Container>
         <AddNote addNote={this.handleAddNote} />
         <Divider />
-        <DisplayNotes notes={this.state.notes} />
+        <DisplayNotes notes={this.state.notes}
+          removeNote={this.removeNote} />
       </Container>
     );
   }
