@@ -3,13 +3,32 @@ import './App.css';
 import AddNote from './components/AddNote';
 import 'semantic-ui-css/semantic.min.css';
 import { Container } from 'semantic-ui-react';
+import axios from 'axios';
 
 class App extends Component {
+
+  state = {
+    notes: [],
+  }
+
+  handleAddNote = async (newNote) => {
+    const url = 'http://localhost:3001/notes';
+    const payload = {
+      ...newNote,
+      createAdd: new Date(),
+    }
+    const response = await axios.post(url, payload);
+    if (response.status === 200 || response.status === 201) {
+      this.setState({
+        notes: this.state.notes.concat(response.data),
+      });
+    }
+  }
 
   render() {
     return (
       <Container>
-        <AddNote />
+        <AddNote addNote={this.handleAddNote} />
       </Container>
     );
   }
